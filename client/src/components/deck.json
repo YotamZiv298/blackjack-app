@@ -1,0 +1,264 @@
+{
+    "cards": [
+        {
+            "rank": "A",
+            "suit": "spades",
+            "imagePath": "../assets/cards/ace_of_spades.svg"
+        },
+        {
+            "rank": "A",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/ace_of_diamonds.svg"
+        },
+        {
+            "rank": "A",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/ace_of_clubs.svg"
+        },
+        {
+            "rank": "A",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/ace_of_hearts.svg"
+        },
+        {
+            "rank": "2",
+            "suit": "spades",
+            "imagePath": "../assets/cards/2_of_spades.svg"
+        },
+        {
+            "rank": "2",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/2_of_diamonds.svg"
+        },
+        {
+            "rank": "2",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/2_of_clubs.svg"
+        },
+        {
+            "rank": "2",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/2_of_hearts.svg"
+        },
+        {
+            "rank": "3",
+            "suit": "spades",
+            "imagePath": "../assets/cards/3_of_spades.svg"
+        },
+        {
+            "rank": "3",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/3_of_diamonds.svg"
+        },
+        {
+            "rank": "3",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/3_of_clubs.svg"
+        },
+        {
+            "rank": "3",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/3_of_hearts.svg"
+        },
+        {
+            "rank": "4",
+            "suit": "spades",
+            "imagePath": "../assets/cards/4_of_spades.svg"
+        },
+        {
+            "rank": "4",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/4_of_diamonds.svg"
+        },
+        {
+            "rank": "4",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/4_of_clubs.svg"
+        },
+        {
+            "rank": "4",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/4_of_hearts.svg"
+        },
+        {
+            "rank": "5",
+            "suit": "spades",
+            "imagePath": "../assets/cards/5_of_spades.svg"
+        },
+        {
+            "rank": "5",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/5_of_diamonds.svg"
+        },
+        {
+            "rank": "5",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/5_of_clubs.svg"
+        },
+        {
+            "rank": "5",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/5_of_hearts.svg"
+        },
+        {
+            "rank": "6",
+            "suit": "spades",
+            "imagePath": "../assets/cards/6_of_spades.svg"
+        },
+        {
+            "rank": "6",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/6_of_diamonds.svg"
+        },
+        {
+            "rank": "6",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/6_of_clubs.svg"
+        },
+        {
+            "rank": "6",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/6_of_hearts.svg"
+        },
+        {
+            "rank": "7",
+            "suit": "spades",
+            "imagePath": "../assets/cards/7_of_spades.svg"
+        },
+        {
+            "rank": "7",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/7_of_diamonds.svg"
+        },
+        {
+            "rank": "7",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/7_of_clubs.svg"
+        },
+        {
+            "rank": "7",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/7_of_hearts.svg"
+        },
+        {
+            "rank": "8",
+            "suit": "spades",
+            "imagePath": "../assets/cards/8_of_spades.svg"
+        },
+        {
+            "rank": "8",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/8_of_diamonds.svg"
+        },
+        {
+            "rank": "8",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/8_of_clubs.svg"
+        },
+        {
+            "rank": "8",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/8_of_hearts.svg"
+        },
+        {
+            "rank": "9",
+            "suit": "spades",
+            "imagePath": "../assets/cards/9_of_spades.svg"
+        },
+        {
+            "rank": "9",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/9_of_diamonds.svg"
+        },
+        {
+            "rank": "9",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/9_of_clubs.svg"
+        },
+        {
+            "rank": "9",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/9_of_hearts.svg"
+        },
+        {
+            "rank": "10",
+            "suit": "spades",
+            "imagePath": "../assets/cards/10_of_spades.svg"
+        },
+        {
+            "rank": "10",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/10_of_diamonds.svg"
+        },
+        {
+            "rank": "10",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/10_of_clubs.svg"
+        },
+        {
+            "rank": "10",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/10_of_hearts.svg"
+        },
+        {
+            "rank": "J",
+            "suit": "spades",
+            "imagePath": "../assets/cards/jack_of_spades.svg"
+        },
+        {
+            "rank": "J",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/jack_of_diamonds.svg"
+        },
+        {
+            "rank": "J",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/jack_of_clubs.svg"
+        },
+        {
+            "rank": "J",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/jack_of_hearts.svg"
+        },
+        {
+            "rank": "Q",
+            "suit": "spades",
+            "imagePath": "../assets/cards/queen_of_spades.svg"
+        },
+        {
+            "rank": "Q",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/queen_of_diamonds.svg"
+        },
+        {
+            "rank": "Q",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/queen_of_clubs.svg"
+        },
+        {
+            "rank": "Q",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/queen_of_hearts.svg"
+        },
+        {
+            "rank": "K",
+            "suit": "spades",
+            "imagePath": "../assets/cards/king_of_spades.svg"
+        },
+        {
+            "rank": "K",
+            "suit": "diamonds",
+            "imagePath": "../assets/cards/king_of_diamonds.svg"
+        },
+        {
+            "rank": "K",
+            "suit": "clubs",
+            "imagePath": "../assets/cards/king_of_clubs.svg"
+        },
+        {
+            "rank": "K",
+            "suit": "hearts",
+            "imagePath": "../assets/cards/king_of_hearts.svg"
+        }
+    ]
+}

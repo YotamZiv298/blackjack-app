@@ -1,0 +1,114 @@
+.controlsContainer {
+    display: flex;
+    justify-content: center;
+    /* margin: 0.5em 1em 1em 1em; */
+}
+
+.betContainer {
+    /* display: flex; */
+    align-items: center;
+    /* color: black; */
+    margin: 0 0.5em;
+    /* padding: 0 1em; */
+    width: 40%;
+    background: peru;
+    border: 5px solid black;
+    border-radius: 10px;
+    /* box-shadow: 0px 1px 10px rgb(0, 0, 0); */
+}
+
+.betTitle {
+    -webkit-text-stroke: 0.5px azure;
+}
+
+.input {
+    /* width: 1px; */
+    /* flex-grow: 1; */
+    /* margin: 0 0 0 0.5em; */
+    font-size: 150%;
+    text-align: center;
+    margin: 5px;
+    /* padding: 0; */
+    border: 1px;
+    border-radius: 10px;
+    outline: 0;
+    background: burlywood;
+    color: black;
+}
+
+.inputError {
+    /* width: 1px; */
+    /* flex-grow: 1; */
+    /* margin: 0 0 0 0.5em; */
+    font-size: 150%;
+    text-align: center;
+    margin: 5px;
+    /* padding: 0; */
+    border: 0;
+    border-radius: 10px;
+    outline: 0;
+    background: burlywood;
+    color: red;
+}
+
+.input::-webkit-inner-spin-button, 
+.inputError::-webkit-inner-spin-button {
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
+.button {
+    color: black;
+    font-weight: bold;
+    margin: 0 0.5em;
+    /* padding: 1em; */
+    width: 20%;
+    background: peru;
+    outline: none;
+    border: 5px solid black;
+    -webkit-text-stroke: 0.5px azure;
+    border-radius: 10px;
+    /* box-shadow: 0px 1px 10px rgb(0, 0, 0); */
+    text-align: center;
+    font-size: 25px;
+    cursor: pointer;
+}
+.button:hover {
+    color: black;
+    background: burlywood;
+    border: 5px solid black;
+}
+.button:disabled {
+    color: gray;
+    background: rgb(60, 60, 60);
+    border: 5px solid gray;
+    cursor: default;
+}
+
+/* @media (hover: hover) {
+    .button:hover {
+        color: black;
+        background: black;
+        border: 5px solid black;
+    }
+} */
+
+
+
+@media screen and (max-width: 992px) {
+    .betContainer {
+        /* width: 50%; */
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .betContainer {
+        /* width: 70%; */
+    }
+    .betContainer h4 {
+        /* font-size: 75%; */
+    }
+    .betContainer input {
+        /* font-size: 125%; */
+    }
+}

@@ -4,7 +4,7 @@ import './App.css';
 
 import Status from './components/status';
 import Controls from './components/controls';
-import Hand from './components/hand'
+import Hand from './components/hand';
 
 const App = () => {
   const [initData, setInitData] = useState('');
@@ -13,19 +13,19 @@ const App = () => {
 
   const callAPI = () => {
     fetch('http://localhost:9000/')
-      .then(res => { res.json(); console.log(res); })
+      .then(res => { res.clone().json(); console.log(res); })
       .then(res => setInitData(res));
   };
 
   const fetchDeck = () => {
     fetch('http://localhost:9000/deck')
-      .then(res => { res.json(); console.log(res); })
+      .then(res => { res.clone().json(); console.log(res); })
       .then(res => setDeck(res));
   };
 
   const fetchCard = (dealType) => {
     fetch('http://localhost:9000/card/' + dealType)
-      .then(res => { res.json(); console.log(res); })
+      .then(res => { res.clone().json(); console.log(res); })
       .then(res => setCard(res));
   };
 
@@ -47,7 +47,7 @@ const App = () => {
   const [balance, setBalance] = useState(100);
   const [bet, setBet] = useState(0);
 
-  const [gameState, setGameState] = useState();
+  const [gameState, setGameState] = useState('');
   const [message, setMessage] = useState('');
   const [buttonState, setButtonState] = useState({
     hitDisabled: false,
@@ -88,7 +88,7 @@ const App = () => {
 
   // DONE
   useEffect(() => {
-    if (gameState && gameState === initData.GameState.PLAYER_TURN) {
+    if (gameState === initData.GameState.PLAYER_TURN) {
       if (playerScore === 21) {
         buttonState.hitDisabled = true;
         setButtonState({ ...buttonState });

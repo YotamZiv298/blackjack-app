@@ -43,6 +43,10 @@ const App = () => {
     if (gameState === GameState.INIT) {
       deck = shuffle(deck);
 
+      fetch('http://localhost:9000/card')
+        .then(res => { res.json(); console.log(res) })
+        .then(res => setApiResponse(res));
+
       drawCard(Deal.PLAYER);
       drawCard(Deal.HIDDEN);
       drawCard(Deal.PLAYER);

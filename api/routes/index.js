@@ -30,8 +30,8 @@ router.get('/', function (req, res, next) {
   res.json(data);
 });
 
-// router.get('/card', function (req, res, next) {
-//   res.send();
-// });
+router.get('/card', function (req, res, next) {
+  res.send();
+});
 
 module.exports = router;

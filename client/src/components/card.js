@@ -25,12 +25,6 @@ const Card = (props) => {
         setImage(initImage(imagePath));
     }, []);
 
-    const componentDidMount = () => {
-        fetch('/api/card')
-            .then(res => res.json())
-            .then(card => this.setState({ card }, () => console.log('Card fetched...', card)));
-    }
-
     /**
      * Return the image by given path.
      * @param {string} path - Image path.
@@ -149,9 +143,26 @@ const Card = (props) => {
         }
     };
 
+    const rankToString = (rank) => {
+        switch (rank) {
+            case 'A':
+                return 'ace';
+            case 'J':
+                return 'jack';
+            case 'Q':
+                return 'queen';
+            case 'K':
+                return 'king';
+            default:
+                return rank;
+        }
+    };
+
     return (
         <React.Fragment>
-            <img src={(props.hidden) ? hiddenImage : image} width='7%' height='7%' />
+            {/* <img src={(props.hidden) ? hiddenImage : image} width='7%' height='7%' /> */}
+            <img src={(props.hidden) ? '../assets/cards/card_back.svg' :
+                '../assets/cards/' + rankToString(props.rank) + '_of_' + props.suit} width='7%' height='7%' />
         </React.Fragment>
     );
 }

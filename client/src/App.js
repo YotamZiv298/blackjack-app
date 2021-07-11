@@ -32,6 +32,8 @@ const App = () => {
   useEffect(() => {
     callAPI();
     fetchDeck();
+    setGameState(initData.GameState.BET);
+    setButtonState(initData.Message.BET);
   }, []);
 
   const [playerCards, setPlayerCards] = useState([]);
@@ -45,8 +47,8 @@ const App = () => {
   const [balance, setBalance] = useState(100);
   const [bet, setBet] = useState(0);
 
-  const [gameState, setGameState] = useState(initData.GameState.BET);
-  const [message, setMessage] = useState(initData.Message.BET);
+  const [gameState, setGameState] = useState();
+  const [message, setMessage] = useState('');
   const [buttonState, setButtonState] = useState({
     hitDisabled: false,
     standDisabled: false,
@@ -86,7 +88,7 @@ const App = () => {
 
   // DONE
   useEffect(() => {
-    if (gameState === initData.GameState.PLAYER_TURN) {
+    if (gameState && gameState === initData.GameState.PLAYER_TURN) {
       if (playerScore === 21) {
         buttonState.hitDisabled = true;
         setButtonState({ ...buttonState });
@@ -110,21 +112,21 @@ const App = () => {
 
   return (
     <div className='App'>
-      <Status message={initData.message} balance={initData.balance} />
+      <Status message={message} balance={balance} />
       <Controls
-        balance={initData.balance}
-        gameState={initData.gameState}
-        buttonState={initData.buttonState}
+        balance={balance}
+        gameState={gameState}
+        buttonState={buttonState}
         betEvent={initData.placeBet}
         hitEvent={initData.hit}
         standEvent={initData.stand}
         resetEvent={initData.resetGame}
       />
       <div className='deckContainer'>
-        <h2 className='deckCards'>{initData.deck.length} cards left</h2>
+        <h2 className='deckCards'>{deck.length} cards left</h2>
       </div>
-      <Hand name={'Dealer : ' + initData.dealerScore} cards={initData.dealerCards} />
-      <Hand name={'You : ' + initData.playerScore} cards={initData.playerCards} />
+      <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
+      <Hand name={'You : ' + playerScore} cards={playerCards} />
       Yotam Ⓒ
 
       {/* <header className='App-header'>

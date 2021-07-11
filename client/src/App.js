@@ -7,34 +7,9 @@ import Controls from './components/controls';
 import Hand from './components/hand';
 
 const App = () => {
-  const [initData, setInitData] = useState('');
+  const [initData, setInitData] = useState();
   const [deck, setDeck] = useState([]);
   const [card, setCard] = useState();
-
-  const callAPI = () => {
-    fetch('http://localhost:9000/')
-      .then(res => { res.clone().json(); console.log(res); })
-      .then(res => setInitData(res));
-  };
-
-  const fetchDeck = () => {
-    fetch('http://localhost:9000/deck')
-      .then(res => { res.clone().json(); console.log(res); })
-      .then(res => setDeck(res));
-  };
-
-  const fetchCard = (dealType) => {
-    fetch('http://localhost:9000/card/' + dealType)
-      .then(res => { res.clone().json(); console.log(res); })
-      .then(res => setCard(res));
-  };
-
-  useEffect(() => {
-    callAPI();
-    fetchDeck();
-    setGameState(initData.GameState.BET);
-    setButtonState(initData.Message.BET);
-  }, []);
 
   const [playerCards, setPlayerCards] = useState([]);
   const [playerScore, setPlayerScore] = useState(0);
@@ -55,64 +30,108 @@ const App = () => {
     resetDisabled: true
   });
 
-  // DONE
+  // const callAPI = () => {
+  //   fetch('http://localhost:9000/')
+  //     .then(res => res.clone().json())
+  //     .then(res => {
+  //       setInitData(res);
+  //       console.log(res);
+  //     });
+  // };
   useEffect(() => {
-    if (gameState === initData.GameState.INIT) {
-      deck = initData.shuffle(deck);
+    fetch('http://localhost:9000/')
+      .then(res => res.clone().json())
+      .then(res => {
+        setInitData(res);
+        console.log(res);
+      });
+  }, []);
 
-      fetchCard(initData.Deal.PLAYER);
-      fetchCard(initData.Deal.HIDDEN);
-      fetchCard(initData.Deal.PLAYER);
-      fetchCard(initData.Deal.DEALER);
+  const fetchDeck = () => {
+    fetch('http://localhost:9000/deck')
+      .then(res => res.clone().json())
+      .then(res => {
+        setDeck(res);
+        console.log(res);
+      });
+  };
 
-      // drawCard(initData.Deal.PLAYER);
-      // drawCard(initData.Deal.HIDDEN);
-      // drawCard(initData.Deal.PLAYER);
-      // drawCard(initData.Deal.DEALER);
-      setGameState(initData.GameState.PLAYER_TURN);
-      setMessage(initData.Message.HIT_STAND);
+  const fetchCard = (dealType) => {
+    fetch('http://localhost:9000/card/' + dealType)
+      .then(res => res.clone().json())
+      .then(res => {
+        setCard(res);
+        console.log(res);
+      });
+  };
+
+  useEffect(() => {
+    // callAPI();
+    // fetchDeck();
+    if (initData !== undefined) {
+      setGameState(initData.GameState.BET);
+      setButtonState(initData.Message.BET);
     }
-  }, [gameState]);
+  }, [initData]);
 
   // DONE
-  useEffect(() => {
-    initData.calcScore(playerCards, setPlayerScore);
-    setPlayerCount(playerCount + 1);
-  }, [playerCards]);
+  // useEffect(() => {
+  //   if (gameState === initData.GameState.INIT) {
+  //     deck = initData.shuffle(deck);
 
-  // DONE
-  useEffect(() => {
-    initData.calcScore(dealerCards, setDealerScore);
-    setDealerCount(dealerCount + 1);
-  }, [dealerCards]);
+  //     fetchCard(initData.Deal.PLAYER);
+  //     fetchCard(initData.Deal.HIDDEN);
+  //     fetchCard(initData.Deal.PLAYER);
+  //     fetchCard(initData.Deal.DEALER);
 
-  // DONE
-  useEffect(() => {
-    if (gameState === initData.GameState.PLAYER_TURN) {
-      if (playerScore === 21) {
-        buttonState.hitDisabled = true;
-        setButtonState({ ...buttonState });
-      } else if (playerScore > 21) {
-        initData.bust();
-      }
-    }
-  }, [playerCount]);
+  //     // drawCard(initData.Deal.PLAYER);
+  //     // drawCard(initData.Deal.HIDDEN);
+  //     // drawCard(initData.Deal.PLAYER);
+  //     // drawCard(initData.Deal.DEALER);
+  //     setGameState(initData.GameState.PLAYER_TURN);
+  //     setMessage(initData.Message.HIT_STAND);
+  //   }
+  // }, [gameState]);
 
-  // DONE
-  useEffect(() => {
-    if (gameState === GameState.DEALER_TURN) {
-      if (dealerScore >= 17) {
-        initData.checkWin();
-      } else {
-        fetchCard(initData.Deal.DEALER);
-        // drawCard(Deal.DEALER);
-      }
-    }
-  }, [dealerCount]);
+  // // DONE
+  // useEffect(() => {
+  //   initData.calcScore(playerCards, setPlayerScore);
+  //   setPlayerCount(playerCount + 1);
+  // }, [playerCards]);
+
+  // // DONE
+  // useEffect(() => {
+  //   initData.calcScore(dealerCards, setDealerScore);
+  //   setDealerCount(dealerCount + 1);
+  // }, [dealerCards]);
+
+  // // DONE
+  // useEffect(() => {
+  //   if (gameState === initData.GameState.PLAYER_TURN) {
+  //     if (playerScore === 21) {
+  //       buttonState.hitDisabled = true;
+  //       setButtonState({ ...buttonState });
+  //     } else if (playerScore > 21) {
+  //       initData.bust();
+  //     }
+  //   }
+  // }, [playerCount]);
+
+  // // DONE
+  // useEffect(() => {
+  //   if (gameState === GameState.DEALER_TURN) {
+  //     if (dealerScore >= 17) {
+  //       initData.checkWin();
+  //     } else {
+  //       fetchCard(initData.Deal.DEALER);
+  //       // drawCard(Deal.DEALER);
+  //     }
+  //   }
+  // }, [dealerCount]);
 
   return (
     <div className='App'>
-      <Status message={message} balance={balance} />
+      {/* <Status message={message} balance={balance} />
       <Controls
         balance={balance}
         gameState={gameState}
@@ -127,7 +146,7 @@ const App = () => {
       </div>
       <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
       <Hand name={'You : ' + playerScore} cards={playerCards} />
-      Yotam Ⓒ
+      Yotam Ⓒ */}
 
       {/* <header className='App-header'>
         <img src={logo} className='App-logo' alt='logo' />

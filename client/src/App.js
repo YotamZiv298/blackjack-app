@@ -7,16 +7,31 @@ import Controls from './components/controls';
 import Hand from './components/hand'
 
 const App = () => {
-  const [apiResponse, setApiResponse] = useState('');
+  const [initData, setInitData] = useState('');
+  const [deck, setDeck] = useState([]);
+  const [card, setCard] = useState();
 
   const callAPI = () => {
     fetch('http://localhost:9000/')
-      .then(res => { res.json(); console.log(res) })
-      .then(res => setApiResponse(res));
+      .then(res => { res.json(); console.log(res); })
+      .then(res => setInitData(res));
+  };
+
+  const fetchDeck = () => {
+    fetch('http://localhost:9000/deck')
+      .then(res => { res.json(); console.log(res); })
+      .then(res => setDeck(res));
+  };
+
+  const fetchCard = (dealType) => {
+    fetch('http://localhost:9000/card/' + dealType)
+      .then(res => { res.json(); console.log(res); })
+      .then(res => setCard(res));
   };
 
   useEffect(() => {
     callAPI();
+    fetchDeck();
   }, []);
 
   const [playerCards, setPlayerCards] = useState([]);
@@ -30,8 +45,8 @@ const App = () => {
   const [balance, setBalance] = useState(100);
   const [bet, setBet] = useState(0);
 
-  const [gameState, setGameState] = useState(GameState.BET);
-  const [message, setMessage] = useState(Message.BET);
+  const [gameState, setGameState] = useState(initData.GameState.BET);
+  const [message, setMessage] = useState(initData.Message.BET);
   const [buttonState, setButtonState] = useState({
     hitDisabled: false,
     standDisabled: false,
@@ -40,42 +55,43 @@ const App = () => {
 
   // DONE
   useEffect(() => {
-    if (gameState === GameState.INIT) {
-      deck = shuffle(deck);
+    if (gameState === initData.GameState.INIT) {
+      deck = initData.shuffle(deck);
 
-      fetch('http://localhost:9000/card')
-        .then(res => { res.json(); console.log(res) })
-        .then(res => setApiResponse(res));
+      fetchCard(initData.Deal.PLAYER);
+      fetchCard(initData.Deal.HIDDEN);
+      fetchCard(initData.Deal.PLAYER);
+      fetchCard(initData.Deal.DEALER);
 
-      drawCard(Deal.PLAYER);
-      drawCard(Deal.HIDDEN);
-      drawCard(Deal.PLAYER);
-      drawCard(Deal.DEALER);
-      setGameState(GameState.PLAYER_TURN);
-      setMessage(Message.HIT_STAND);
+      // drawCard(initData.Deal.PLAYER);
+      // drawCard(initData.Deal.HIDDEN);
+      // drawCard(initData.Deal.PLAYER);
+      // drawCard(initData.Deal.DEALER);
+      setGameState(initData.GameState.PLAYER_TURN);
+      setMessage(initData.Message.HIT_STAND);
     }
   }, [gameState]);
 
   // DONE
   useEffect(() => {
-    calcScore(playerCards, setPlayerScore);
+    initData.calcScore(playerCards, setPlayerScore);
     setPlayerCount(playerCount + 1);
   }, [playerCards]);
 
   // DONE
   useEffect(() => {
-    calcScore(dealerCards, setDealerScore);
+    initData.calcScore(dealerCards, setDealerScore);
     setDealerCount(dealerCount + 1);
   }, [dealerCards]);
 
   // DONE
   useEffect(() => {
-    if (gameState === GameState.PLAYER_TURN) {
+    if (gameState === initData.GameState.PLAYER_TURN) {
       if (playerScore === 21) {
         buttonState.hitDisabled = true;
         setButtonState({ ...buttonState });
       } else if (playerScore > 21) {
-        bust();
+        initData.bust();
       }
     }
   }, [playerCount]);
@@ -84,30 +100,31 @@ const App = () => {
   useEffect(() => {
     if (gameState === GameState.DEALER_TURN) {
       if (dealerScore >= 17) {
-        checkWin();
+        initData.checkWin();
       } else {
-        drawCard(Deal.DEALER);
+        fetchCard(initData.Deal.DEALER);
+        // drawCard(Deal.DEALER);
       }
     }
   }, [dealerCount]);
 
   return (
     <div className='App'>
-      <Status message={apiResponse.message} balance={apiResponse.balance} />
+      <Status message={initData.message} balance={initData.balance} />
       <Controls
-        balance={apiResponse.balance}
-        gameState={apiResponse.gameState}
-        buttonState={apiResponse.buttonState}
-        betEvent={apiResponse.placeBet}
-        hitEvent={apiResponse.hit}
-        standEvent={apiResponse.stand}
-        resetEvent={apiResponse.resetGame}
+        balance={initData.balance}
+        gameState={initData.gameState}
+        buttonState={initData.buttonState}
+        betEvent={initData.placeBet}
+        hitEvent={initData.hit}
+        standEvent={initData.stand}
+        resetEvent={initData.resetGame}
       />
       <div className='deckContainer'>
-        <h2 className='deckCards'>{apiResponse.deck.length} cards left</h2>
+        <h2 className='deckCards'>{initData.deck.length} cards left</h2>
       </div>
-      <Hand name={'Dealer : ' + apiResponse.dealerScore} cards={apiResponse.dealerCards} />
-      <Hand name={'You : ' + apiResponse.playerScore} cards={apiResponse.playerCards} />
+      <Hand name={'Dealer : ' + initData.dealerScore} cards={initData.dealerCards} />
+      <Hand name={'You : ' + initData.playerScore} cards={initData.playerCards} />
       Yotam Ⓒ
 
       {/* <header className='App-header'>
@@ -115,7 +132,7 @@ const App = () => {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-        <p className='App-intro'>{apiResponse}</p>
+        <p className='App-intro'>{initData}</p>
         <a
           className='App-link'
           href='https://reactjs.org'
@@ -136,14 +153,14 @@ export default App;
 //     super(props);
 
 //     this.state = {
-//       apiResponse: ''
+//       initData: ''
 //     };
 //   }
 
 //   callAPI() {
 //     fetch('http://localhost:9000/')
 //       .then(res => res.text())
-//       .then(res => this.setState({ apiResponse: res }));
+//       .then(res => this.setState({ initData: res }));
 //   }
 
 //   componentWillMount() {
@@ -174,7 +191,7 @@ export default App;
 //           <p>
 //             Edit <code>src/App.js</code> and save to reload.
 //           </p>
-//           <p className='App-intro'>{this.state.apiResponse}</p>
+//           <p className='App-intro'>{this.state.initData}</p>
 //           <a
 //             className='App-link'
 //             href='https://reactjs.org'

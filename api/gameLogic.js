@@ -26,24 +26,24 @@ const data = JSON.parse(JSON.stringify(jsonData.cards));
 // const [deck, setDeck] = useState(data);
 const deck = data;
 
-const [playerCards, setPlayerCards] = useState([]);
-const [playerScore, setPlayerScore] = useState(0);
-const [playerCount, setPlayerCount] = useState(0);
+// const [playerCards, setPlayerCards] = useState([]);
+// const [playerScore, setPlayerScore] = useState(0);
+// const [playerCount, setPlayerCount] = useState(0);
 
-const [dealerCards, setDealerCards] = useState([]);
-const [dealerScore, setDealerScore] = useState(0);
-const [dealerCount, setDealerCount] = useState(0);
+// const [dealerCards, setDealerCards] = useState([]);
+// const [dealerScore, setDealerScore] = useState(0);
+// const [dealerCount, setDealerCount] = useState(0);
 
-const [balance, setBalance] = useState(100);
-const [bet, setBet] = useState(0);
+// const [balance, setBalance] = useState(100);
+// const [bet, setBet] = useState(0);
 
-const [gameState, setGameState] = useState(GameState.BET);
-const [message, setMessage] = useState(Message.BET);
-const [buttonState, setButtonState] = useState({
-    hitDisabled: false,
-    standDisabled: false,
-    resetDisabled: true
-});
+// const [gameState, setGameState] = useState(GameState.BET);
+// const [message, setMessage] = useState(Message.BET);
+// const [buttonState, setButtonState] = useState({
+//     hitDisabled: false,
+//     standDisabled: false,
+//     resetDisabled: true
+// });
 
 const shuffle = (cards) => {
     let currentIndex = cards.length, randomIndex;
@@ -299,21 +299,34 @@ const checkWin = () => {
 };
 
 module.exports = {
-    data,
+    GameState,
+    Deal,
+    Message,
+
     deck,
-    playerCards,
-    playerScore,
-    playerCount,
-    dealerCards,
-    dealerScore,
-    dealerCount,
-    balance,
-    bet,
-    gameState,
-    message,
-    buttonState,
+    // playerCards,
+    // playerScore,
+    // playerCount,
+
+    // dealerCards,
+    // dealerScore,
+    // dealerCount,
+
+    // balance,
+    // bet,
+
+    // gameState,
+    // message,
+    // buttonState,
+
     resetGame,
     placeBet,
+    drawCard,
+    dealCard,
+    revealCard,
+    calcScore,
     hit,
-    stand
+    stand,
+    bust,
+    checkWin
 };

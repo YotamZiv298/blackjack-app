@@ -1,6 +1,6 @@
 // import gameLogic from '../gameLogic';
 
-var gameLogic = require('../gameLogic');
+var apiGameLogic = require('../apiGameLogic');
 
 var express = require('express');
 var router = express.Router();
@@ -48,17 +48,17 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/deck', function (req, res, next) {
-  gameLogic.deck = gameLogic.shuffle(gameLogic.deck);
-  res.send(gameLogic.deck);
+  apiGameLogic.deck = apiGameLogic.shuffle(apiGameLogic.deck);
+  res.send(apiGameLogic.deck);
 });
 
 router.get('/card/:dealType', function (req, res, next) {
-  let card = gameLogic.drawCard(req.params.dealType);
+  let card = apiGameLogic.drawCard(req.params.dealType);
   res.json(card);
 });
 
 router.get('/calcScore/:cards/:setScore', function (req, res, next) {
-  gameLogic.calcScore(req.params.cards, req.params.setScore);
+  apiGameLogic.calcScore(req.params.cards, req.params.setScore);
   res.json("Got it");
 });
 

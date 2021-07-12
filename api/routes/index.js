@@ -7,11 +7,11 @@ const cors = require('cors');
 // router.use(cors({ allowedOrigins: ['*'] }));
 
 var data = {
-  'GameState': gameLogic.GameState,
-  'Deal': gameLogic.Deal,
-  'Message': gameLogic.Message,
+  'GameState': apiGameLogic.GameState,
+  'Deal': apiGameLogic.Deal,
+  'Message': apiGameLogic.Message,
 
-  'deck': gameLogic.deck,
+  'deck': apiGameLogic.deck,
   // 'playerCards': gameLogic.playerCards,
   // 'playerScore': gameLogic.playerScore,
   // 'playerCount': gameLogic.playerCount,
@@ -26,17 +26,17 @@ var data = {
   // 'gameState': gameLogic.gameState,
   // 'message': gameLogic.message,
   // 'buttonState': gameLogic.buttonState,
-
-  'resetGame': gameLogic.resetGame,
-  'placeBet': gameLogic.placeBet,
-  'drawCard': gameLogic.drawCard,
-  'dealCard': gameLogic.dealCard,
-  'revealCard': gameLogic.revealCard,
-  'calcScore': gameLogic.calcScore,
-  'hit': gameLogic.hit,
-  'stand': gameLogic.stand,
-  'bust': gameLogic.bust,
-  'checkWin': gameLogic.checkWin
+  'shuffle': apiGameLogic.shuffle,
+  // 'resetGame': gameLogic.resetGame,
+  // 'placeBet': gameLogic.placeBet,
+  'drawCard': apiGameLogic.drawCard,
+  // 'dealCard': gameLogic.dealCard,
+  // 'revealCard': gameLogic.revealCard,
+  // 'calcScore': gameLogic.calcScore,
+  // 'hit': gameLogic.hit,
+  // 'stand': gameLogic.stand,
+  // 'bust': gameLogic.bust,
+  // 'checkWin': gameLogic.checkWin
 };
 
 /* GET home page. */
@@ -50,14 +50,11 @@ router.get('/deck', function (req, res, next) {
   res.send(apiGameLogic.deck);
 });
 
-router.get('/card/:dealType', function (req, res, next) {
-  let card = apiGameLogic.drawCard(req.params.dealType);
-  res.json(card);
-});
+router.post('/card', function (req, res, next) {
+  var dealType = req.body.dealType;
 
-router.get('/calcScore/:cards/:setScore', function (req, res, next) {
-  apiGameLogic.calcScore(req.params.cards, req.params.setScore);
-  res.json("Got it");
+  let card = apiGameLogic.drawCard(dealType);
+  res.json(card);
 });
 
 module.exports = router;

@@ -1,6 +1,8 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useCallback } from 'react';
 import logo from './logo.svg';
 import './App.css';
+
+import cliendGameLogic from "./components/clientGameLogic";
 
 import Status from './components/status';
 import Controls from './components/controls';
@@ -36,6 +38,7 @@ const App = () => {
       .then(res => res.clone().json())
       .then(res => {
         setInitData(res);
+        setGameState(res.GameState.BET);
         console.log(res);
       });
   }, []);
@@ -50,22 +53,24 @@ const App = () => {
       });
   }, []);
 
-  const fetchCard = (dealType) => {
-    fetch('http://localhost:9000/card/' + dealType)
+  // Get Card
+  const fetchCard = useCallback((dealType) => {
+    fetch('http://localhost:9000/card', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        dealType: dealType,
+      })
+    })
       .then(res => res.clone().json())
       .then(res => {
-        setCard(res);
         console.log(res);
+        dealCard(dealType, res);
       });
-  };
-
-  const callCalcScore = (cards, setScore) => {
-    fetch(`http://localhost:9000/calcScore?cards=${cards}?setScore=${setScore}`)
-      .then(res => res.clone().json())
-      .then(res => {
-        console.log(res);
-      });
-  };
+  }, []);
 
   // DONE
   useEffect(() => {
@@ -85,24 +90,24 @@ const App = () => {
         setGameState(initData.GameState.PLAYER_TURN);
         setMessage(initData.Message.HIT_STAND);
       }
-  }, [gameState]);
+  }, [initData, gameState, fetchCard]);
 
   // // DONE
   useEffect(() => {
-    if (initData !== undefined) {
-      // initData.calcScore(playerCards, setPlayerScore);
-      callCalcScore(playerCards, setPlayerScore);
-      setPlayerCount(playerCount + 1);
-    }
+    // if (initData !== undefined) {
+    // initData.calcScore(playerCards, setPlayerScore);
+    calcScore(playerCards, setPlayerScore);
+    setPlayerCount(playerCount + 1);
+    // }
   }, [playerCards]);
 
   // // DONE
   useEffect(() => {
-    if (initData !== undefined) {
-      // initData.calcScore(dealerCards, setDealerScore);
-      callCalcScore(dealerCards, setDealerScore);
-      setDealerCount(dealerCount + 1);
-    }
+    // if (initData !== undefined) {
+    // initData.calcScore(dealerCards, setDealerScore);
+    calcScore(dealerCards, setDealerScore);
+    setDealerCount(dealerCount + 1);
+    // }
   }, [dealerCards]);
 
   // // DONE
@@ -123,7 +128,7 @@ const App = () => {
     if (initData !== undefined && gameState !== undefined)
       if (gameState === initData.GameState.DEALER_TURN) {
         if (dealerScore >= 17) {
-          initData.checkWin();
+          cliendGameLogic.checkWin();
         } else {
           fetchCard(initData.Deal.DEALER);
           // drawCard(Deal.DEALER);
@@ -168,15 +173,15 @@ const App = () => {
       hidden: false
     };
     switch (dealType) {
-      case Deal.PLAYER:
+      case initData.Deal.PLAYER:
         playerCards.push(info);
         setPlayerCards([...playerCards]);
         break;
-      case Deal.DEALER:
+      case initData.Deal.DEALER:
         dealerCards.push(info);
         setDealerCards([...dealerCards]);
         break;
-      case Deal.HIDDEN:
+      case initData.Deal.HIDDEN:
         info.hidden = true;
         dealerCards.push(info);
         setDealerCards([...dealerCards]);
@@ -279,14 +284,15 @@ const App = () => {
 
   return (
     <div className='App'>
-      {initData !== undefined && gameState !== undefined &&
+      {
+        initData !== undefined && gameState !== undefined &&
         <>
           <Status message={message} balance={balance} />
           <Controls
             balance={balance}
             gameState={gameState}
             buttonState={buttonState}
-            betEvent={initData.placeBet}
+            betEvent={cliendGameLogic.placeBet}
             hitEvent={initData.hit}
             standEvent={initData.stand}
             resetEvent={initData.resetGame}
@@ -296,22 +302,8 @@ const App = () => {
           </div>
           <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
           <Hand name={'You : ' + playerScore} cards={playerCards} />
-        </>}
-      {/* <Status message={message} balance={balance} />
-      <Controls
-        balance={balance}
-        gameState={gameState}
-        buttonState={buttonState}
-        betEvent={initData.placeBet}
-        hitEvent={initData.hit}
-        standEvent={initData.stand}
-        resetEvent={initData.resetGame}
-      />
-      <div className='deckContainer'>
-        <h2 className='deckCards'>{deck.length} cards left</h2>
-      </div>
-      <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
-      <Hand name={'You : ' + playerScore} cards={playerCards} /> */}
+        </>
+      }
       Yotam Ⓒ
 
       {/* <header className='App-header'>

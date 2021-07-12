@@ -1,5 +1,3 @@
-// import gameLogic from '../gameLogic';
-
 var apiGameLogic = require('../apiGameLogic');
 
 var express = require('express');

@@ -145,174 +145,28 @@ const drawCard = (dealType) => {
         deck.splice(0, 1);
 
         console.log('Remaining Cards:', deck.length);
-
-        switch (card.suit) {
-            case 'spades':
-                dealCard(dealType, card);
-                break;
-            case 'diamonds':
-                dealCard(dealType, card);
-                break;
-            case 'clubs':
-                dealCard(dealType, card);
-                break;
-            case 'hearts':
-                dealCard(dealType, card);
-                break;
-            default:
-                break;
-        }
+        dealCard(dealType, card);
+        // switch (card.suit) {
+        //     case 'spades':
+        //         dealCard(dealType, card);
+        //         break;
+        //     case 'diamonds':
+        //         dealCard(dealType, card);
+        //         break;
+        //     case 'clubs':
+        //         dealCard(dealType, card);
+        //         break;
+        //     case 'hearts':
+        //         dealCard(dealType, card);
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
     else {
         alert('All cards have been drawn');
     }
 };
-
-// DONE
-// Be in client (UI)
-// const dealCard = (dealType, card) => {
-//     console.log("entered: dealCard");
-
-//     let info = {
-//         rank: card.rank,
-//         suit: card.suit,
-//         imagePath: card.imagePath,
-//         hidden: false
-//     };
-//     switch (dealType) {
-//         case Deal.PLAYER:
-//             playerCards.push(info);
-//             setPlayerCards([...playerCards]);
-//             break;
-//         case Deal.DEALER:
-//             dealerCards.push(info);
-//             setDealerCards([...dealerCards]);
-//             break;
-//         case Deal.HIDDEN:
-//             info.hidden = true;
-//             dealerCards.push(info);
-//             setDealerCards([...dealerCards]);
-//             break;
-//         default:
-//             break;
-//     }
-// };
-
-// DONE
-// Be in client (UI)
-// const revealCard = () => {
-//     console.log("entered: revealCard");
-
-//     dealerCards.filter((card) => {
-//         if (card.hidden === true) {
-//             card.hidden = false;
-//         }
-//         return card;
-//     });
-//     setDealerCards([...dealerCards])
-// };
-
-// DONE
-// Be in client (UI)
-// const calcScore = (cards, setScore) => {
-//     console.log("entered: calcScore");
-
-//     let total = 0;
-
-//     cards.forEach((card) => {
-//         if (card.hidden === false && card.rank !== 'A') {
-//             switch (card.rank) {
-//                 case 'K':
-//                     total += 10;
-//                     break;
-//                 case 'Q':
-//                     total += 10;
-//                     break;
-//                 case 'J':
-//                     total += 10;
-//                     break;
-//                 default:
-//                     total += +card.rank;
-//                     break;
-//             }
-//         }
-//     });
-
-//     const aces = cards.filter((card) => {
-//         return card.rank === 'A';
-//     });
-
-//     aces.forEach((card) => {
-//         if (card.hidden === false) {
-//             if ((total + 11) > 21) {
-//                 total += 1;
-//             }
-//             else if ((total + 11) === 21) {
-//                 if (aces.length > 1) {
-//                     total += 1;
-//                 }
-//                 else {
-//                     total += 11;
-//                 }
-//             }
-//             else {
-//                 total += 11;
-//             }
-//         }
-//     });
-
-//     setScore(total);
-// };
-
-// DONE
-// Be in client (UI)
-// const hit = () => {
-//     console.log("entered: hit");
-
-//     drawCard(Deal.PLAYER);
-// };
-
-// DONE
-// Be in client (UI)
-// const stand = () => {
-//     console.log("entered: stand");
-
-//     buttonState.hitDisabled = true;
-//     buttonState.standDisabled = true;
-//     buttonState.resetDisabled = false;
-//     setButtonState({ ...buttonState });
-
-//     setGameState(GameState.DEALER_TURN);
-//     revealCard();
-// };
-
-// DONE
-// Be in client (UI)
-// const bust = () => {
-//     console.log("entered: bust");
-
-//     buttonState.hitDisabled = true;
-//     buttonState.standDisabled = true;
-//     buttonState.resetDisabled = false;
-//     setButtonState({ ...buttonState });
-//     setMessage(Message.BUST);
-// };
-
-// DONE
-// Be in client (Logic)
-// const checkWin = () => {
-//     console.log("entered: checkWin");
-
-//     if (playerScore > dealerScore || dealerScore > 21) {
-//         setBalance(Math.round((balance + (bet * 2)) * 100) / 100);
-//         setMessage(Message.PLAYER_WIN);
-//     } else if (dealerScore > playerScore) {
-//         setMessage(Message.DEALER_WIN);
-//     } else {
-//         setBalance(Math.round((balance + (bet * 1)) * 100) / 100);
-//         setMessage(Message.TIE);
-//     }
-// };
 
 module.exports = {
     GameState,
@@ -336,14 +190,14 @@ module.exports = {
     // buttonState,
 
     shuffle,
-    resetGame,
-    placeBet,
-    drawCard,
-    dealCard,
-    revealCard,
-    calcScore,
-    hit,
-    stand,
-    bust,
-    checkWin
+    // resetGame,
+    // placeBet,
+    drawCard
+    // dealCard,
+    // revealCard,
+    // calcScore,
+    // hit,
+    // stand,
+    // bust,
+    // checkWin
 };

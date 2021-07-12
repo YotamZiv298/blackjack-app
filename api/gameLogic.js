@@ -46,6 +46,7 @@ const deck = data;
 // });
 
 const shuffle = (cards) => {
+    console.log("entered: shuffle");
     let currentIndex = cards.length, randomIndex;
 
     while (0 !== currentIndex) {
@@ -108,6 +109,7 @@ const shuffle = (cards) => {
 
 // DONE
 const resetGame = () => {
+    console.log("entered: resetGame");
     //console.clear();
     //setDeck(data);
     if (deck.length >= 4) {
@@ -135,6 +137,8 @@ const resetGame = () => {
 
 // DONE
 const placeBet = (amount) => {
+    console.log("entered: placeBet");
+
     setBet(amount);
     setBalance(Math.round((balance - amount) * 100) / 100);
     setGameState(GameState.INIT);
@@ -142,6 +146,8 @@ const placeBet = (amount) => {
 
 // DONE
 const drawCard = (dealType) => {
+    console.log("entered: drawCard");
+
     if (deck.length > 0) {
         // const randomIndex = Math.floor(Math.random() * deck.length);
         // const card = deck[randomIndex];
@@ -175,6 +181,8 @@ const drawCard = (dealType) => {
 
 // DONE
 const dealCard = (dealType, card) => {
+    console.log("entered: dealCard");
+
     let info = {
         rank: card.rank,
         suit: card.suit,
@@ -202,6 +210,8 @@ const dealCard = (dealType, card) => {
 
 // DONE
 const revealCard = () => {
+    console.log("entered: revealCard");
+
     dealerCards.filter((card) => {
         if (card.hidden === true) {
             card.hidden = false;
@@ -213,6 +223,8 @@ const revealCard = () => {
 
 // DONE
 const calcScore = (cards, setScore) => {
+    console.log("entered: calcScore");
+
     let total = 0;
 
     cards.forEach((card) => {
@@ -262,11 +274,15 @@ const calcScore = (cards, setScore) => {
 
 // DONE
 const hit = () => {
+    console.log("entered: hit");
+
     drawCard(Deal.PLAYER);
 };
 
 // DONE
 const stand = () => {
+    console.log("entered: stand");
+
     buttonState.hitDisabled = true;
     buttonState.standDisabled = true;
     buttonState.resetDisabled = false;
@@ -278,6 +294,8 @@ const stand = () => {
 
 // DONE
 const bust = () => {
+    console.log("entered: bust");
+
     buttonState.hitDisabled = true;
     buttonState.standDisabled = true;
     buttonState.resetDisabled = false;
@@ -287,6 +305,8 @@ const bust = () => {
 
 // DONE
 const checkWin = () => {
+    console.log("entered: checkWin");
+
     if (playerScore > dealerScore || dealerScore > 21) {
         setBalance(Math.round((balance + (bet * 2)) * 100) / 100);
         setMessage(Message.PLAYER_WIN);
@@ -319,6 +339,7 @@ module.exports = {
     // message,
     // buttonState,
 
+    shuffle,
     resetGame,
     placeBet,
     drawCard,

@@ -6,7 +6,7 @@ var express = require('express');
 var router = express.Router();
 const cors = require('cors');
 
-router.use(cors({ allowedOrigins: ['*'] }));
+// router.use(cors({ allowedOrigins: ['*'] }));
 
 var data = {
   'GameState': gameLogic.GameState,
@@ -48,12 +48,18 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/deck', function (req, res, next) {
+  gameLogic.deck = gameLogic.shuffle(gameLogic.deck);
   res.send(gameLogic.deck);
 });
 
 router.get('/card/:dealType', function (req, res, next) {
   let card = gameLogic.drawCard(req.params.dealType);
-  res.send(card);
+  res.json(card);
+});
+
+router.get('/calcScore/:cards/:setScore', function (req, res, next) {
+  gameLogic.calcScore(req.params.cards, req.params.setScore);
+  res.json("Got it");
 });
 
 module.exports = router;

@@ -22,8 +22,8 @@ const App = () => {
   const [balance, setBalance] = useState(100);
   const [bet, setBet] = useState(0);
 
-  const [gameState, setGameState] = useState('');
-  const [message, setMessage] = useState('');
+  const [gameState, setGameState] = useState();
+  const [message, setMessage] = useState();
   const [buttonState, setButtonState] = useState({
     hitDisabled: false,
     standDisabled: false,
@@ -38,6 +38,8 @@ const App = () => {
   //       console.log(res);
   //     });
   // };
+
+  // Get initData
   useEffect(() => {
     fetch('http://localhost:9000/')
       .then(res => res.clone().json())
@@ -47,14 +49,24 @@ const App = () => {
       });
   }, []);
 
-  const fetchDeck = () => {
+  // Get Deck
+  useEffect(() => {
     fetch('http://localhost:9000/deck')
       .then(res => res.clone().json())
       .then(res => {
         setDeck(res);
         console.log(res);
       });
-  };
+  }, []);
+
+  // const fetchDeck = () => {
+  //   fetch('http://localhost:9000/deck')
+  //     .then(res => res.clone().json())
+  //     .then(res => {
+  //       setDeck(res);
+  //       console.log(res);
+  //     });
+  // };
 
   const fetchCard = (dealType) => {
     fetch('http://localhost:9000/card/' + dealType)
@@ -65,72 +77,107 @@ const App = () => {
       });
   };
 
-  useEffect(() => {
-    // callAPI();
-    // fetchDeck();
-    if (initData !== undefined) {
-      setGameState(initData.GameState.BET);
-      setButtonState(initData.Message.BET);
-    }
-  }, [initData]);
+  const callCalcScore = (cards, setScore) => {
+    fetch(`http://localhost:9000/calcScore?cards=${cards}?setScore=${setScore}`)
+      .then(res => res.clone().json())
+      .then(res => {
+        console.log(res);
+      });
+  };
+
+  // useEffect(() => {
+  //   // callAPI();
+  //   // fetchDeck();
+  //   // if (initData !== undefined) {
+  //   //   setGameState(initData.GameState.BET);
+  //   //   setButtonState(initData.Message.BET);
+  //   // }
+  // }, []);
 
   // DONE
-  // useEffect(() => {
-  //   if (gameState === initData.GameState.INIT) {
-  //     deck = initData.shuffle(deck);
+  useEffect(() => {
+    if (initData !== undefined && gameState !== undefined)
+      if (gameState === initData.GameState.INIT) {
+        // deck = initData.shuffle(deck);
 
-  //     fetchCard(initData.Deal.PLAYER);
-  //     fetchCard(initData.Deal.HIDDEN);
-  //     fetchCard(initData.Deal.PLAYER);
-  //     fetchCard(initData.Deal.DEALER);
+        fetchCard(initData.Deal.PLAYER);
+        fetchCard(initData.Deal.HIDDEN);
+        fetchCard(initData.Deal.PLAYER);
+        fetchCard(initData.Deal.DEALER);
 
-  //     // drawCard(initData.Deal.PLAYER);
-  //     // drawCard(initData.Deal.HIDDEN);
-  //     // drawCard(initData.Deal.PLAYER);
-  //     // drawCard(initData.Deal.DEALER);
-  //     setGameState(initData.GameState.PLAYER_TURN);
-  //     setMessage(initData.Message.HIT_STAND);
-  //   }
-  // }, [gameState]);
-
-  // // DONE
-  // useEffect(() => {
-  //   initData.calcScore(playerCards, setPlayerScore);
-  //   setPlayerCount(playerCount + 1);
-  // }, [playerCards]);
+        // drawCard(initData.Deal.PLAYER);
+        // drawCard(initData.Deal.HIDDEN);
+        // drawCard(initData.Deal.PLAYER);
+        // drawCard(initData.Deal.DEALER);
+        setGameState(initData.GameState.PLAYER_TURN);
+        setMessage(initData.Message.HIT_STAND);
+      }
+  }, [gameState]);
 
   // // DONE
-  // useEffect(() => {
-  //   initData.calcScore(dealerCards, setDealerScore);
-  //   setDealerCount(dealerCount + 1);
-  // }, [dealerCards]);
+  useEffect(() => {
+    if (initData !== undefined) {
+      // initData.calcScore(playerCards, setPlayerScore);
+      callCalcScore(playerCards, setPlayerScore);
+      setPlayerCount(playerCount + 1);
+    }
+  }, [playerCards]);
 
   // // DONE
-  // useEffect(() => {
-  //   if (gameState === initData.GameState.PLAYER_TURN) {
-  //     if (playerScore === 21) {
-  //       buttonState.hitDisabled = true;
-  //       setButtonState({ ...buttonState });
-  //     } else if (playerScore > 21) {
-  //       initData.bust();
-  //     }
-  //   }
-  // }, [playerCount]);
+  useEffect(() => {
+    if (initData !== undefined) {
+      // initData.calcScore(dealerCards, setDealerScore);
+      callCalcScore(dealerCards, setDealerScore);
+      setDealerCount(dealerCount + 1);
+    }
+  }, [dealerCards]);
 
   // // DONE
-  // useEffect(() => {
-  //   if (gameState === GameState.DEALER_TURN) {
-  //     if (dealerScore >= 17) {
-  //       initData.checkWin();
-  //     } else {
-  //       fetchCard(initData.Deal.DEALER);
-  //       // drawCard(Deal.DEALER);
-  //     }
-  //   }
-  // }, [dealerCount]);
+  useEffect(() => {
+    if (initData !== undefined && gameState !== undefined)
+      if (gameState === initData.GameState.PLAYER_TURN) {
+        if (playerScore === 21) {
+          buttonState.hitDisabled = true;
+          setButtonState({ ...buttonState });
+        } else if (playerScore > 21) {
+          initData.bust();
+        }
+      }
+  }, [playerCount]);
+
+  // // DONE
+  useEffect(() => {
+    if (initData !== undefined && gameState !== undefined)
+      if (gameState === initData.GameState.DEALER_TURN) {
+        if (dealerScore >= 17) {
+          initData.checkWin();
+        } else {
+          fetchCard(initData.Deal.DEALER);
+          // drawCard(Deal.DEALER);
+        }
+      }
+  }, [dealerCount]);
 
   return (
     <div className='App'>
+      {initData !== undefined && gameState !== undefined &&
+        <>
+          <Status message={message} balance={balance} />
+          <Controls
+            balance={balance}
+            gameState={gameState}
+            buttonState={buttonState}
+            betEvent={initData.placeBet}
+            hitEvent={initData.hit}
+            standEvent={initData.stand}
+            resetEvent={initData.resetGame}
+          />
+          <div className='deckContainer'>
+            <h2 className='deckCards'>{deck.length} cards left</h2>
+          </div>
+          <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
+          <Hand name={'You : ' + playerScore} cards={playerCards} />
+        </>}
       {/* <Status message={message} balance={balance} />
       <Controls
         balance={balance}
@@ -145,8 +192,8 @@ const App = () => {
         <h2 className='deckCards'>{deck.length} cards left</h2>
       </div>
       <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
-      <Hand name={'You : ' + playerScore} cards={playerCards} />
-      Yotam Ⓒ */}
+      <Hand name={'You : ' + playerScore} cards={playerCards} /> */}
+      Yotam Ⓒ
 
       {/* <header className='App-header'>
         <img src={logo} className='App-logo' alt='logo' />

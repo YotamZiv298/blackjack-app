@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 import Status from './components/status';
@@ -7,10 +7,7 @@ import Hand from './components/hand';
 
 const App = () => {
   const [initData, setInitData] = useState();
-  // const deck = [];
-  const [deck, setDeck] = useState([]);
   const [deckLength, setDeckLength] = useState(0);
-  const [card, setCard] = useState();
 
   const [playerCards, setPlayerCards] = useState([]);
   const [playerScore, setPlayerScore] = useState(0);
@@ -37,7 +34,6 @@ const App = () => {
       .then(res => res.clone().json())
       .then(res => {
         setInitData(res);
-        setDeck(res.deck);
         setDeckLength(res.deck.length);
         setGameState(res.GameState.BET);
         setMessage(res.Message.BET);
@@ -52,9 +48,7 @@ const App = () => {
       .then(res => {
         console.log('deck:');
         console.log(res);
-        setDeck(res);
         setDeckLength(res.length);
-        // return res;
       });
   };
 
@@ -84,41 +78,31 @@ const App = () => {
   useEffect(() => {
     if (initData !== undefined && gameState !== undefined)
       if (gameState === initData.GameState.INIT) {
-        // deck = initData.shuffle(deck);
-        // setDeck(fetchDeck());
         fetchDeck();
-        // setDeckLength(deck.length);
 
         fetchCard(initData.Deal.PLAYER);
         fetchCard(initData.Deal.HIDDEN);
         fetchCard(initData.Deal.PLAYER);
         fetchCard(initData.Deal.DEALER);
 
-        // drawCard(initData.Deal.PLAYER);
-        // drawCard(initData.Deal.HIDDEN);
-        // drawCard(initData.Deal.PLAYER);
-        // drawCard(initData.Deal.DEALER);
         setGameState(initData.GameState.PLAYER_TURN);
         setMessage(initData.Message.HIT_STAND);
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initData, gameState]);
 
   // // DONE
   useEffect(() => {
-    // if (initData !== undefined) {
-    // initData.calcScore(playerCards, setPlayerScore);
     calcScore(playerCards, setPlayerScore);
     setPlayerCount(playerCount + 1);
-    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerCards]);
 
   // // DONE
   useEffect(() => {
-    // if (initData !== undefined) {
-    // initData.calcScore(dealerCards, setDealerScore);
     calcScore(dealerCards, setDealerScore);
     setDealerCount(dealerCount + 1);
-    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealerCards]);
 
   // // DONE
@@ -132,6 +116,7 @@ const App = () => {
           bust();
         }
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerCount]);
 
   // // DONE
@@ -139,19 +124,16 @@ const App = () => {
     if (initData !== undefined && gameState !== undefined)
       if (gameState === initData.GameState.DEALER_TURN) {
         if (dealerScore >= 17) {
-          // clientGameLogic.checkWin();
           checkWin();
         } else {
           fetchCard(initData.Deal.DEALER);
-          // drawCard(Deal.DEALER);
         }
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealerCount]);
 
   const resetGame = () => {
     console.log('entered: resetGame');
-    //console.clear();
-    //setDeck(data);
     if (initData !== undefined)
       if (deckLength >= 4) {
         setPlayerCards([]);
@@ -282,7 +264,6 @@ const App = () => {
   const hit = () => {
     console.log('entered: hit');
 
-    // drawCard(Deal.PLAYER);
     if (initData !== undefined)
       fetchCard(initData.Deal.PLAYER);
   };
@@ -315,7 +296,6 @@ const App = () => {
   const refreshGame = async () => {
     await fetch('http://localhost:9000/resetDeck')
       .then(res => {
-        // setDeck(res);
         console.log(res);
       });
   };
@@ -359,84 +339,8 @@ const App = () => {
         </>
       }
       Yotam Ⓒ
-
-      {/* <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p className='App-intro'>{initData}</p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Learn React
-        </a>
-      </header> */}
     </div>
   );
 };
 
 export default App;
-
-// class App extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       initData: ''
-//     };
-//   }
-
-//   callAPI() {
-//     fetch('http://localhost:9000/')
-//       .then(res => res.text())
-//       .then(res => this.setState({ initData: res }));
-//   }
-
-//   componentWillMount() {
-//     this.callAPI();
-//   }
-
-//   render() {
-//     return (
-//       <div className='App' >
-//         <Status message={message} balance={balance} />
-//         <Controls
-//           balance={balance}
-//           gameState={gameState}
-//           buttonState={buttonState}
-//           betEvent={placeBet}
-//           hitEvent={hit}
-//           standEvent={stand}
-//           resetEvent={resetGame}
-//         />
-//         <div className='deckContainer'>
-//           <h2 className='deckCards'>{deck.length} cards left</h2>
-//         </div>
-//         <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
-//         <Hand name={'You : ' + playerScore} cards={playerCards} />
-//         Yotam Ⓒ
-//         {/* <header className='App-header'>
-//           <img src={logo} className='App-logo' alt='logo' />
-//           <p>
-//             Edit <code>src/App.js</code> and save to reload.
-//           </p>
-//           <p className='App-intro'>{this.state.initData}</p>
-//           <a
-//             className='App-link'
-//             href='https://reactjs.org'
-//             target='_blank'
-//             rel='noopener noreferrer'
-//           >
-//             Learn React
-//           </a>
-//         </header> */}
-//       </div>
-//     );
-//   }
-// }
-
-// export default App;

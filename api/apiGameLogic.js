@@ -1,7 +1,5 @@
 let jsonData = require('../client/src/components/deck.json');
 
-// move chips money to here
-
 const GameState = {
     BET: 0,
     INIT: 1,
@@ -31,7 +29,6 @@ const getDeck = () => {
     return deck;
 }
 
-// Be in server
 const shuffle = () => {
     console.log("entered: shuffle");
 
@@ -45,7 +42,6 @@ const shuffle = () => {
     }
 };
 
-// Be in server
 const drawCard = (dealType) => {
     console.log("entered: drawCard");
 
@@ -54,7 +50,7 @@ const drawCard = (dealType) => {
         deck.splice(0, 1);
 
         console.log('Remaining Cards:', deck.length);
-        // dealCard(dealType, card);
+        
         return card;
     } else {
         alert('All cards have been drawn');

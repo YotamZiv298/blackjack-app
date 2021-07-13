@@ -10,8 +10,6 @@ import { useState } from 'react';
  * @returns {JSX.Element} Card
  */
 const Card = (props) => {
-    const [apiResponse, setApiResponse] = useState('');
-
     // Path for the card image.
     const [imagePath, setImagePath] = useState(props.imagePath);
     // Image of the card when it's hidden => back of the card.
@@ -23,6 +21,7 @@ const Card = (props) => {
     useEffect(() => {
         setHiddenImage(initImage('../assets/cards/card_back.svg'));
         setImage(initImage(imagePath));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     /**
@@ -143,26 +142,9 @@ const Card = (props) => {
         }
     };
 
-    const rankToString = (rank) => {
-        switch (rank) {
-            case 'A':
-                return 'ace';
-            case 'J':
-                return 'jack';
-            case 'Q':
-                return 'queen';
-            case 'K':
-                return 'king';
-            default:
-                return rank;
-        }
-    };
-
     return (
         <React.Fragment>
-            <img src={(props.hidden) ? hiddenImage : image} width='7%' height='7%' />
-            {/* <img src={(props.hidden) ? './assets/cards/card_back.svg' :
-                './assets/cards/' + rankToString(props.rank) + '_of_' + props.suit + '.svg'} width='7%' height='7%' /> */}
+            <img alt='' src={(props.hidden) ? hiddenImage : image} width='7%' height='7%' />
         </React.Fragment>
     );
 }

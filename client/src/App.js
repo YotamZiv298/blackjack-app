@@ -9,6 +9,7 @@ const App = () => {
   const [initData, setInitData] = useState();
   // const deck = [];
   const [deck, setDeck] = useState([]);
+  const [deckLength, setDeckLength] = useState(0);
   const [card, setCard] = useState();
 
   const [playerCards, setPlayerCards] = useState([]);
@@ -37,6 +38,7 @@ const App = () => {
       .then(res => {
         setInitData(res);
         setDeck(res.deck);
+        setDeckLength(res.deck.length);
         setGameState(res.GameState.BET);
         setMessage(res.Message.BET);
         console.log('initData:');
@@ -51,12 +53,14 @@ const App = () => {
         console.log('deck:');
         console.log(res);
         setDeck(res);
+        setDeckLength(res.length);
         // return res;
       });
   };
 
   // Get Card
-  const fetchCard = useCallback(async (dealType) => {
+  const fetchCard = async (dealType) => {
+    let card;
     await fetch('http://localhost:9000/card', {
       method: 'POST',
       headers: {
@@ -69,10 +73,12 @@ const App = () => {
     })
       .then(res => res.clone().json())
       .then(res => {
+        console.log('card:');
         console.log(res);
-        dealCard(dealType, res);
+        card = res;
       });
-  }, []);
+    dealCard(dealType, card);
+  };
 
   // DONE
   useEffect(() => {
@@ -81,6 +87,7 @@ const App = () => {
         // deck = initData.shuffle(deck);
         // setDeck(fetchDeck());
         fetchDeck();
+        // setDeckLength(deck.length);
 
         fetchCard(initData.Deal.PLAYER);
         fetchCard(initData.Deal.HIDDEN);
@@ -94,7 +101,7 @@ const App = () => {
         setGameState(initData.GameState.PLAYER_TURN);
         setMessage(initData.Message.HIT_STAND);
       }
-  }, [initData, gameState, fetchCard]);
+  }, [initData, gameState]);
 
   // // DONE
   useEffect(() => {
@@ -146,7 +153,7 @@ const App = () => {
     //console.clear();
     //setDeck(data);
     if (initData !== undefined)
-      if (deck.length >= 4) {
+      if (deckLength >= 4) {
         setPlayerCards([]);
         setPlayerScore(0);
         setPlayerCount(0);
@@ -181,7 +188,7 @@ const App = () => {
 
   const dealCard = (dealType, card) => {
     console.log('entered: dealCard');
-
+    console.log(`initData: ${initData}`)
     if (initData !== undefined) {
       let info = {
         rank: card.rank,
@@ -206,6 +213,7 @@ const App = () => {
         default:
           break;
       }
+      setDeckLength(len => len - 1);
     }
   };
 
@@ -344,7 +352,7 @@ const App = () => {
             refreshEvent={refreshGame}
           />
           <div className='deckContainer'>
-            <h2 className='deckCards'>{deck.length} cards left</h2>
+            <h2 className='deckCards'>{deckLength} cards left</h2>
           </div>
           <Hand name={'Dealer : ' + dealerScore} cards={dealerCards} />
           <Hand name={'You : ' + playerScore} cards={playerCards} />

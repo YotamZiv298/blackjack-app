@@ -160,9 +160,9 @@ const Card = (props) => {
 
     return (
         <React.Fragment>
-            {/* <img src={(props.hidden) ? hiddenImage : image} width='7%' height='7%' /> */}
-            <img src={(props.hidden) ? '../assets/cards/card_back.svg' :
-                '../assets/cards/' + rankToString(props.rank) + '_of_' + props.suit + '.svg'} width='7%' height='7%' />
+            <img src={(props.hidden) ? hiddenImage : image} width='7%' height='7%' />
+            {/* <img src={(props.hidden) ? './assets/cards/card_back.svg' :
+                './assets/cards/' + rankToString(props.rank) + '_of_' + props.suit + '.svg'} width='7%' height='7%' /> */}
         </React.Fragment>
     );
 }

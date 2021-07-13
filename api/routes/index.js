@@ -45,6 +45,11 @@ router.get('/', function (req, res, next) {
   res.json(data);
 });
 
+router.get('/initDeck', function (req, res, next) {
+  apiGameLogic.initDeck();
+  res.send(apiGameLogic.deck);
+});
+
 router.get('/deck', function (req, res, next) {
   apiGameLogic.deck = apiGameLogic.shuffle(apiGameLogic.deck);
   res.send(apiGameLogic.deck);

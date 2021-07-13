@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState, useCallback } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import cliendGameLogic from "./components/clientGameLogic";
+// import clientGameLogic from "./components/clientGameLogic";
 
 import Status from './components/status';
 import Controls from './components/controls';
@@ -10,6 +10,7 @@ import Hand from './components/hand';
 
 const App = () => {
   const [initData, setInitData] = useState();
+  // const deck = [];
   const [deck, setDeck] = useState([]);
   const [card, setCard] = useState();
 
@@ -38,24 +39,36 @@ const App = () => {
       .then(res => res.clone().json())
       .then(res => {
         setInitData(res);
+        setDeck(res.deck);
         setGameState(res.GameState.BET);
+        setMessage(res.Message.BET);
         console.log(res);
       });
   }, []);
 
   // Get Deck
-  useEffect(() => {
-    fetch('http://localhost:9000/deck')
+  // useEffect(() => {
+  //   fetch('http://localhost:9000/deck')
+  //     .then(res => res.clone().json())
+  //     .then(res => {
+  //       setDeck(res);
+  //       console.log(res);
+  //     });
+  // }, []);
+
+  const fetchDeck = async () => {
+    await fetch('http://localhost:9000/deck')
       .then(res => res.clone().json())
       .then(res => {
-        setDeck(res);
         console.log(res);
+        setDeck(res);
+        // return res;
       });
-  }, []);
+  };
 
   // Get Card
-  const fetchCard = useCallback((dealType) => {
-    fetch('http://localhost:9000/card', {
+  const fetchCard = useCallback(async (dealType) => {
+    await fetch('http://localhost:9000/card', {
       method: "POST",
       headers: {
         'Accept': 'application/json',
@@ -77,6 +90,8 @@ const App = () => {
     if (initData !== undefined && gameState !== undefined)
       if (gameState === initData.GameState.INIT) {
         // deck = initData.shuffle(deck);
+        // setDeck(fetchDeck());
+        fetchDeck();
 
         fetchCard(initData.Deal.PLAYER);
         fetchCard(initData.Deal.HIDDEN);
@@ -118,7 +133,7 @@ const App = () => {
           buttonState.hitDisabled = true;
           setButtonState({ ...buttonState });
         } else if (playerScore > 21) {
-          initData.bust();
+          bust();
         }
       }
   }, [playerCount]);
@@ -128,7 +143,8 @@ const App = () => {
     if (initData !== undefined && gameState !== undefined)
       if (gameState === initData.GameState.DEALER_TURN) {
         if (dealerScore >= 17) {
-          cliendGameLogic.checkWin();
+          // clientGameLogic.checkWin();
+          checkWin();
         } else {
           fetchCard(initData.Deal.DEALER);
           // drawCard(Deal.DEALER);
@@ -140,54 +156,68 @@ const App = () => {
     console.log('entered: resetGame');
     //console.clear();
     //setDeck(data);
-    if (deck.length >= 4) {
-      setPlayerCards([]);
-      setPlayerScore(0);
-      setPlayerCount(0);
+    if (initData !== undefined)
+      // if (deck.length >= 4) {
+      if (deck.length >= 4) {
+        setPlayerCards([]);
+        setPlayerScore(0);
+        setPlayerCount(0);
 
-      setDealerCards([]);
-      setDealerScore(0);
-      setDealerCount(0);
+        setDealerCards([]);
+        setDealerScore(0);
+        setDealerCount(0);
 
-      setBet(0);
+        setBet(0);
 
-      setGameState(initData.GameState.BET);
-      setMessage(initData.Message.BET);
-      setButtonState({
-        hitDisabled: false,
-        standDisabled: false,
-        resetDisabled: true
-      });
-    } else {
-      alert('Low card count, press Refresh to start a new game.');
+        setGameState(initData.GameState.BET);
+        setMessage(initData.Message.BET);
+        setButtonState({
+          hitDisabled: false,
+          standDisabled: false,
+          resetDisabled: true
+        });
+      } else {
+        alert('Low card count, press Refresh to start a new game.');
+      }
+  };
+
+  const placeBet = (amount) => {
+    console.log("entered: placeBet");
+
+    if (initData !== undefined) {
+      setBet(amount);
+      setBalance(Math.round((balance - amount) * 100) / 100);
+      setGameState(initData.GameState.INIT);
     }
   };
 
   const dealCard = (dealType, card) => {
     console.log('entered: dealCard');
 
-    let info = {
-      rank: card.rank,
-      suit: card.suit,
-      imagePath: card.imagePath,
-      hidden: false
-    };
-    switch (dealType) {
-      case initData.Deal.PLAYER:
-        playerCards.push(info);
-        setPlayerCards([...playerCards]);
-        break;
-      case initData.Deal.DEALER:
-        dealerCards.push(info);
-        setDealerCards([...dealerCards]);
-        break;
-      case initData.Deal.HIDDEN:
-        info.hidden = true;
-        dealerCards.push(info);
-        setDealerCards([...dealerCards]);
-        break;
-      default:
-        break;
+    if (initData !== undefined) {
+      let info = {
+        rank: card.rank,
+        suit: card.suit,
+        imagePath: card.imagePath,
+        hidden: false
+      };
+      switch (dealType) {
+        case initData.Deal.PLAYER:
+          playerCards.push(info);
+          setPlayerCards([...playerCards]);
+          break;
+        case initData.Deal.DEALER:
+          dealerCards.push(info);
+          setDealerCards([...dealerCards]);
+          break;
+        case initData.Deal.HIDDEN:
+          info.hidden = true;
+          dealerCards.push(info);
+          setDealerCards([...dealerCards]);
+          break;
+        default:
+          break;
+      }
     }
   };
 
@@ -257,29 +287,56 @@ const App = () => {
     console.log('entered: hit');
 
     // drawCard(Deal.PLAYER);
-    fetchCard(initData.Deal.PLAYER);
+    if (initData !== undefined)
+      fetchCard(initData.Deal.PLAYER);
   };
 
   const stand = () => {
     console.log('entered: stand');
 
-    buttonState.hitDisabled = true;
-    buttonState.standDisabled = true;
-    buttonState.resetDisabled = false;
-    setButtonState({ ...buttonState });
+    if (initData !== undefined) {
+      buttonState.hitDisabled = true;
+      buttonState.standDisabled = true;
+      buttonState.resetDisabled = false;
+      setButtonState({ ...buttonState });
 
-    setGameState(initData.GameState.DEALER_TURN);
-    revealCard();
+      setGameState(initData.GameState.DEALER_TURN);
+      revealCard();
+    }
   };
 
   const bust = () => {
     console.log('entered: bust');
+    if (initData !== undefined) {
+      buttonState.hitDisabled = true;
+      buttonState.standDisabled = true;
+      buttonState.resetDisabled = false;
+      setButtonState({ ...buttonState });
+      setMessage(initData.Message.BUST);
+    }
+  };
 
-    buttonState.hitDisabled = true;
-    buttonState.standDisabled = true;
-    buttonState.resetDisabled = false;
-    setButtonState({ ...buttonState });
-    setMessage(initData.Message.BUST);
+  const refreshGame = () => {
+    fetch('http://localhost:9000/initDeck')
+      .then(res => res.clone().json())
+      .then(res => {
+        // setDeck(res);
+        console.log(res);
+      });
+  };
+
+  const checkWin = () => {
+    console.log("entered: checkWin");
+    if (initData !== undefined)
+      if (playerScore > dealerScore || dealerScore > 21) {
+        setBalance(Math.round((balance + (bet * 2)) * 100) / 100);
+        setMessage(initData.Message.PLAYER_WIN);
+      } else if (dealerScore > playerScore) {
+        setMessage(initData.Message.DEALER_WIN);
+      } else {
+        setBalance(Math.round((balance + (bet * 1)) * 100) / 100);
+        setMessage(initData.Message.TIE);
+      }
   };
 
   return (
@@ -292,10 +349,11 @@ const App = () => {
             balance={balance}
             gameState={gameState}
             buttonState={buttonState}
-            betEvent={cliendGameLogic.placeBet}
-            hitEvent={initData.hit}
-            standEvent={initData.stand}
-            resetEvent={initData.resetGame}
+            betEvent={placeBet}
+            hitEvent={hit}
+            standEvent={stand}
+            resetEvent={resetGame}
+            refreshEvent={refreshGame}
           />
           <div className='deckContainer'>
             <h2 className='deckCards'>{deck.length} cards left</h2>

@@ -12,6 +12,7 @@ import styles from './styles/controls.module.css';
  * @param {any} hitEvent - Hit function.
  * @param {any} standEvent - Stand function.
  * @param {any} resetEvent - Reset function.
+ * @param {any} refreshEvent - Refresh game function.
  * @returns {JSX.Element} Controls.
  */
 const Controls = (props) => {
@@ -46,7 +47,7 @@ const Controls = (props) => {
                         <input type='number' value={amount} onChange={(e) => setAmount(+e.target.value)} className={inputStyle} />
                     </div>
                     <button onClick={() => checkInputValue() ? props.betEvent(Math.round(amount * 100) / 100) : undefined} className={styles.button}>Bet</button>
-                    <button onClick={() => window.location.reload()} className={styles.button}>Refresh</button>
+                    <button onClick={() => { props.refreshEvent(); window.location.reload(); }} className={styles.button}>Refresh</button>
                 </div>
             );
         }
@@ -56,7 +57,7 @@ const Controls = (props) => {
                     <button onClick={() => props.hitEvent()} disabled={props.buttonState.hitDisabled} className={styles.button}>Hit</button>
                     <button onClick={() => props.standEvent()} disabled={props.buttonState.standDisabled} className={styles.button}>Stand</button>
                     <button onClick={() => props.resetEvent()} disabled={props.buttonState.resetDisabled} className={styles.button}>Reset</button>
-                    <button onClick={() => window.location.reload()} className={styles.button}>Refresh</button>
+                    <button onClick={() => { props.refreshEvent(); window.location.reload(); }} className={styles.button}>Refresh</button>
                 </div>
             );
         }

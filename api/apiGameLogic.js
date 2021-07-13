@@ -24,7 +24,7 @@ const Message = {
     TIE: 'Tie'
 };
 
-const deck = JSON.parse(JSON.stringify(jsonData.cards));
+const data = JSON.stringify(jsonData.cards);
 
 // Be in server
 const shuffle = (cards) => {
@@ -58,6 +58,11 @@ const drawCard = (dealType) => {
     }
 };
 
+const initDeck = () => {
+    deck = JSON.parse(data);
+};
+
+initDeck();
 module.exports = {
     GameState,
     Deal,
@@ -66,5 +71,6 @@ module.exports = {
     deck,
 
     shuffle,
-    drawCard
+    drawCard,
+    initDeck
 };

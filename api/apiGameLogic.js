@@ -25,21 +25,24 @@ const Message = {
 };
 
 const data = JSON.stringify(jsonData.cards);
+let deck = [];
+
+const getDeck = () => {
+    return deck;
+}
 
 // Be in server
-const shuffle = (cards) => {
+const shuffle = () => {
     console.log("entered: shuffle");
 
-    let currentIndex = cards.length, randomIndex;
+    let currentIndex = deck.length, randomIndex;
 
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
-        [cards[currentIndex], cards[randomIndex]] = [cards[randomIndex], cards[currentIndex]];
+        [deck[currentIndex], deck[randomIndex]] = [deck[randomIndex], deck[currentIndex]];
     }
-
-    return cards;
 };
 
 // Be in server
@@ -58,19 +61,17 @@ const drawCard = (dealType) => {
     }
 };
 
-const initDeck = () => {
+const resetDeck = () => {
     deck = JSON.parse(data);
 };
 
-initDeck();
 module.exports = {
     GameState,
     Deal,
     Message,
-
-    deck,
-
+    
+    getDeck,
     shuffle,
     drawCard,
-    initDeck
+    resetDeck
 };

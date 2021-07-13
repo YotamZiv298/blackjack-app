@@ -1,8 +1,5 @@
 import React, { Component, useEffect, useState, useCallback } from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-// import clientGameLogic from "./components/clientGameLogic";
 
 import Status from './components/status';
 import Controls from './components/controls';
@@ -34,32 +31,24 @@ const App = () => {
   });
 
   // Get initData
-  useEffect(() => {
-    fetch('http://localhost:9000/')
+  useEffect(async () => {
+    await fetch('http://localhost:9000/')
       .then(res => res.clone().json())
       .then(res => {
         setInitData(res);
         setDeck(res.deck);
         setGameState(res.GameState.BET);
         setMessage(res.Message.BET);
+        console.log('initData:');
         console.log(res);
       });
   }, []);
-
-  // Get Deck
-  // useEffect(() => {
-  //   fetch('http://localhost:9000/deck')
-  //     .then(res => res.clone().json())
-  //     .then(res => {
-  //       setDeck(res);
-  //       console.log(res);
-  //     });
-  // }, []);
 
   const fetchDeck = async () => {
     await fetch('http://localhost:9000/deck')
       .then(res => res.clone().json())
       .then(res => {
+        console.log('deck:');
         console.log(res);
         setDeck(res);
         // return res;
@@ -69,7 +58,7 @@ const App = () => {
   // Get Card
   const fetchCard = useCallback(async (dealType) => {
     await fetch('http://localhost:9000/card', {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -157,7 +146,6 @@ const App = () => {
     //console.clear();
     //setDeck(data);
     if (initData !== undefined)
-      // if (deck.length >= 4) {
       if (deck.length >= 4) {
         setPlayerCards([]);
         setPlayerScore(0);
@@ -182,7 +170,7 @@ const App = () => {
   };
 
   const placeBet = (amount) => {
-    console.log("entered: placeBet");
+    console.log('entered: placeBet');
 
     if (initData !== undefined) {
       setBet(amount);
@@ -316,9 +304,8 @@ const App = () => {
     }
   };
 
-  const refreshGame = () => {
-    fetch('http://localhost:9000/initDeck')
-      .then(res => res.clone().json())
+  const refreshGame = async () => {
+    await fetch('http://localhost:9000/resetDeck')
       .then(res => {
         // setDeck(res);
         console.log(res);
@@ -326,7 +313,8 @@ const App = () => {
   };
 
   const checkWin = () => {
-    console.log("entered: checkWin");
+    console.log('entered: checkWin');
+
     if (initData !== undefined)
       if (playerScore > dealerScore || dealerScore > 21) {
         setBalance(Math.round((balance + (bet * 2)) * 100) / 100);

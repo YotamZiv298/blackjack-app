@@ -65,7 +65,7 @@ const App = () => {
         dealType: dealType,
       })
     })
-      .then(res => res.clone().json())
+      .then(res => res.json())
       .then(res => {
         console.log('card:');
         console.log(res);
@@ -94,8 +94,7 @@ const App = () => {
   // // DONE
   useEffect(() => {
     calcScore(playerCards, setPlayerScore);
-    setPlayerCount(playerCount + 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setPlayerCount(prevPlayerCount => prevPlayerCount + 1);
   }, [playerCards]);
 
   // // DONE

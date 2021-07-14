@@ -30,6 +30,7 @@ const Card = (props) => {
      * @return Image
      */
     const initImage = (path) => {
+        // change to map
         switch (path) {
             case '../assets/cards/card_back.svg':
                 return require('../assets/cards/card_back.svg').default;

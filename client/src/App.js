@@ -195,7 +195,8 @@ const App = () => {
         default:
           break;
       }
-      setDeckLength(len => len - 1);
+      // setDeckLength(len => len - 1);
+      fetchDeck();
     }
   };
 
@@ -265,7 +266,11 @@ const App = () => {
     console.log('entered: hit');
 
     if (initData !== undefined)
-      fetchCard(initData.Deal.PLAYER);
+      if (deckLength >= 2) {
+        fetchCard(initData.Deal.PLAYER);
+      } else {
+        alert('low card count, stand with current Hand or press Refresh for a new game');
+      }
   };
 
   const stand = () => {
@@ -305,12 +310,12 @@ const App = () => {
 
     if (initData !== undefined)
       if (playerScore > dealerScore || dealerScore > 21) {
-        setBalance(Math.round((balance + (bet * 2)) * 100) / 100);
+        setBalance(Math.round((balance + (bet * 2)) * 100) / 100); // Get double from player bet
         setMessage(initData.Message.PLAYER_WIN);
       } else if (dealerScore > playerScore) {
         setMessage(initData.Message.DEALER_WIN);
       } else {
-        setBalance(Math.round((balance + (bet * 1)) * 100) / 100);
+        setBalance(Math.round((balance + (bet * 1)) * 100) / 100); // Get same from player bet
         setMessage(initData.Message.TIE);
       }
   };
